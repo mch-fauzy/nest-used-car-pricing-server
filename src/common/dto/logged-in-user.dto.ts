@@ -1,16 +1,16 @@
-import { Request } from 'express';
-import { JwtTokenPayload } from '../interface/jwt-payload.interface';
+import { User } from 'src/modules/user/entities/user.entity';
+import { Role } from '../enums/user-role.enum';
 
 export class LoggedInUserDto {
-  readonly sub!: string;
+  id!: string;
+  email!: string;
+  role!: Role;
 
-  readonly email!: string;
-
-  static fromRequest(req: Request): LoggedInUserDto {
-    const user = req.user as JwtTokenPayload;
+  static fromEntity(data: User): LoggedInUserDto {
     return {
-      sub: user.sub,
-      email: user.email,
+      id: data.id,
+      email: data.email,
+      role: data.role,
     };
   }
 }

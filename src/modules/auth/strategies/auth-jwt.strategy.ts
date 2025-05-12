@@ -1,14 +1,15 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 import { AUTH } from 'src/infrastructure/configs/auth.config';
 import type { JwtTokenPayload } from 'src/common/interface/jwt-payload.interface';
-import { UserRepository } from '../../user/repositories/user.repository';
+import { AuthService } from '../services/auth.service';
+import { LoggedInUserDto } from '../../../common/dto/logged-in-user.dto';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private userRepo: UserRepository) {
+  constructor(private authService: AuthService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -16,15 +17,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  /* Auto run below if request token sign is valid */
-  async validate(payload: JwtTokenPayload): Promise<JwtTokenPayload> {
-    const { sub, email } = payload;
-    const user = await this.userRepo.findById({ id: sub });
-    if (!user) throw new UnauthorizedException('Token invalid');
-
-    return {
-      sub,
-      email,
-    };
+  /* Auto run below if request token sign is valid and assign to request*/
+  async validate(payload: JwtTokenPayload): Promise<LoggedInUserDto> {
+    const { sub } = payload;
+    const user = await this.authService.getById({ id: sub });
+    return user;
   }
 }

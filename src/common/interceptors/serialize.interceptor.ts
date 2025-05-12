@@ -5,10 +5,11 @@ import {
   type Type,
   UseInterceptors,
 } from '@nestjs/common';
-import { map } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { plainToInstance } from 'class-transformer';
 import { responseWithData } from '../utils/response.util';
 import { MESSAGE_RESPONSE } from '../constants/message-response.constant';
+import { ResponseWithData } from '../interface/response.interface';
 
 /*
  * Serialization is a process that happens before objects are returned in a network response. This is an appropriate place to provide rules for transforming and sanitizing the data to be returned to the client. For example, sensitive data like passwords should always be excluded from the response. Or, certain properties might require additional transformation, such as sending only a subset of properties of an entity
@@ -19,7 +20,10 @@ import { MESSAGE_RESPONSE } from '../constants/message-response.constant';
 class SerializeInterceptor<T> implements NestInterceptor {
   constructor(private dto: Type<T>) {}
 
-  intercept(context: ExecutionContext, next: CallHandler) {
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Observable<ResponseWithData> {
     // Run something before a request is handled by the request handler/controller
     // console.log(`I am running before the handler ${context}`)
 
@@ -41,6 +45,7 @@ class SerializeInterceptor<T> implements NestInterceptor {
   }
 }
 
+// TODO move this into decorators
 export function SerializeIntercept<T>(dto: Type<T>) {
   return UseInterceptors(new SerializeInterceptor(dto));
 }
