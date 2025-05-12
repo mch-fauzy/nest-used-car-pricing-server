@@ -7,7 +7,7 @@ import {
 import { LoggedInUserDto } from '../dto/logged-in-user.dto';
 import { ERROR_MESSAGE } from '../constants/error-message.constant';
 
-// NOTE: return type same as passport jwt strategy in valdiate method src/modules/auth/strategies/auth-jwt.strategy.ts
+// NOTE: return type same as passport jwt strategy in validate method src/modules/auth/strategies/auth-jwt.strategy.ts
 export const CurrentUser = createParamDecorator(
   (data: never, context: ExecutionContext): LoggedInUserDto => {
     const request = context.switchToHttp().getRequest();
