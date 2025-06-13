@@ -1,7 +1,7 @@
-import { PaginationMetadata } from '../interface/response.interface';
+import { PaginationMetadata } from '../interface/metadata.interface';
 
 /* This interface defines a contract for objects that will be used for pagination calculations */
-interface PaginationCalculationInterface {
+interface PaginationInput {
   count: number;
   page: number;
   perPage: number;
@@ -16,7 +16,7 @@ export class PaginationUtil {
    * number of items per page, total number of items, and total number of pages.
    */
   static mapMetadata(
-    params: PaginationCalculationInterface,
+    params: PaginationInput,
   ): PaginationMetadata {
     const page = params.page;
     const perPage = params.perPage;

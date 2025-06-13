@@ -8,7 +8,7 @@ import {
   AuthSignInResponseDto,
 } from '../../dto/auth-sign-in.dto';
 import { AuthService } from '../../services/auth.service';
-import { ApiResponse } from 'src/common/interface/response.interface';
+import { ApiResult } from 'src/common/interface/api-response.interface';
 import { API_RESPONSE_MESSAGE } from 'src/common/constants/api-response-message.constant';
 
 // TODO: implement jwt refresh token https://chatgpt.com/share/6807c8ed-f68c-800c-870a-1a07e7bcf28c
@@ -22,7 +22,7 @@ export class AuthController {
   @Post('sign-up')
   async signUpUser(
     @Body() body: AuthSignUpRequestDto,
-  ): Promise<ApiResponse<null>> {
+  ): Promise<ApiResult<null>> {
     await this.userService.create({
       email: body.email,
       password: body.password,
@@ -46,7 +46,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async signIn(
     @Body() body: AuthSignInRequestDto,
-  ): Promise<ApiResponse<AuthSignInResponseDto>> {
+  ): Promise<ApiResult<AuthSignInResponseDto>> {
     const signInResponse = await this.authService.signIn(body);
 
     return {
@@ -69,7 +69,7 @@ export class AuthController {
    */
   @Post('sign-out')
   @HttpCode(HttpStatus.OK)
-  async signOut(): Promise<ApiResponse<null>> {
+  async signOut(): Promise<ApiResult<null>> {
     return {
       message: API_RESPONSE_MESSAGE.SUCCESS_LOGOUT,
       data: null,

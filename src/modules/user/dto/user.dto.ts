@@ -12,18 +12,18 @@ export class UserDto {
   email!: string;
 }
 
-export class UserResponseDto {
+export class UserResponse {
   email!: string;
   role!: Role;
 
-  static fromEntity(data: User): UserResponseDto {
+  static fromEntity(data: User): UserResponse {
     return {
       email: data.email,
       role: data.role,
     };
   }
 
-  static fromEntities(datas: User[]): UserResponseDto[] {
+  static fromEntities(datas: User[]): UserResponse[] {
     return datas.map((data) => this.fromEntity(data));
   }
 }

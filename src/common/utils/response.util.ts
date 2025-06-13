@@ -1,7 +1,7 @@
 import {
   ResponseWithError,
   ResponseWithData,
-} from '../interface/response.interface';
+} from '../interface/api-response.interface';
 
 export const responseWithError = (
   params: ResponseWithError,

@@ -11,16 +11,16 @@ import { Request } from 'express';
 
 import { UserService } from '../../services/user.service';
 import { UserByIdDto } from '../../dto/user-by-id.dto';
-import { UserDto, UserResponseDto } from '../../dto/user.dto';
+import { UserDto, UserResponse } from '../../dto/user.dto';
 import { SerializeIntercept } from 'src/common/interceptors/serialize.interceptor';
 import { JwtAuthGuard } from 'src/common/guards/auth-jwt.guard';
 import { CurrentUser } from '../../../../common/decorators/current-user.decorator';
 import { LoggedInUserDto } from 'src/common/dto/logged-in-user.dto';
 import { UserQueryDto } from '../../dto/user-query.dto';
 import {
-  ApiResponse,
-  PaginationResponse,
-} from 'src/common/interface/response.interface';
+  ApiResult,
+  Paginated,
+} from 'src/common/interface/api-response.interface';
 import { API_RESPONSE_MESSAGE } from 'src/common/constants/api-response-message.constant';
 
 // TODO: ADD RETURN TYPE (IF NOT NATIVE TYPE) IN CONTROLLER, SERVICE, REPO AND ADD MIDDLEWARE OR UTILS TO response with data (message, data) or response with error (message, errors)
@@ -32,7 +32,7 @@ export class UserController {
   @Get()
   async getList(
     @Query() query: UserQueryDto,
-  ): Promise<ApiResponse<PaginationResponse<UserResponseDto>>> {
+  ): Promise<ApiResult<Paginated<UserResponse>>> {
     const response = await this.userService.getList(query);
     return {
       message: API_RESPONSE_MESSAGE.SUCCESS_GET_DATA('users'),

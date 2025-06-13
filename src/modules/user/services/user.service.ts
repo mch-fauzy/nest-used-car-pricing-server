@@ -12,8 +12,8 @@ import { UserByIdDto } from '../dto/user-by-id.dto';
 import { hashPassword } from 'src/common/utils/password.util';
 import { User } from '../entities/user.entity';
 import { UserQueryDto } from '../dto/user-query.dto';
-import { UserResponseDto } from '../dto/user.dto';
-import { PaginationResponse } from 'src/common/interface/response.interface';
+import { UserResponse } from '../dto/user.dto';
+import { Paginated } from 'src/common/interface/api-response.interface';
 import { PaginationUtil } from 'src/common/utils/pagination.util';
 
 /*
@@ -52,7 +52,7 @@ export class UserService {
 
   async getList(
     req: UserQueryDto,
-  ): Promise<PaginationResponse<UserResponseDto>> {
+  ): Promise<Paginated<UserResponse>> {
     const { users, totalUsers } = await this.userRepo.findManyAndCountByFilter({
       pagination: {
         page: req.page,
@@ -66,7 +66,7 @@ export class UserService {
         page: req.page,
         perPage: req.limit,
       }),
-      items: UserResponseDto.fromEntities(users),
+      items: UserResponse.fromEntities(users),
     };
   }
 

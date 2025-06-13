@@ -1,10 +1,10 @@
 import { Entity, Column, PrimaryGeneratedColumn, Index } from 'typeorm';
 
 import { Role } from 'src/common/enums/user-role.enum';
-import { UserInterface } from '../interfaces/user.interface';
+import { UserModel } from '../interfaces/user.interface';
 
 @Entity()
-export class User implements UserInterface {
+export class User implements UserModel {
   @PrimaryGeneratedColumn('uuid')
   /* The ! tells TypeScript "Trust me, this field will always be set by TypeORM" */
   id!: string;

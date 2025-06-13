@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 
 import { User } from '../entities/user.entity';
 import type { Filter } from 'src/common/interface/filter.interface';
-import { UserInterface } from '../interfaces/user.interface';
+import { UserModel } from '../interfaces/user.interface';
 
 /*
  * use decorators `@Injectable()` to mark this class as injectable so NestJS can manage and inject it as a provider
@@ -20,7 +20,7 @@ export class UserRepository {
    */
   constructor(@InjectRepository(User) private userRepo: Repository<User>) {}
 
-  async create(data: Omit<UserInterface, 'id'>): Promise<User> {
+  async create(data: Omit<UserModel, 'id'>): Promise<User> {
     /* .create will create an instance of User and not commit to db */
     const user = this.userRepo.create(data);
 
@@ -31,12 +31,12 @@ export class UserRepository {
     return await this.userRepo.save(user);
   }
 
-  async findById(primaryId: Pick<UserInterface, 'id'>): Promise<User | null> {
+  async findById(primaryId: Pick<UserModel, 'id'>): Promise<User | null> {
     const user = await this.userRepo.findOneBy({ id: primaryId.id });
     return user;
   }
 
-  async deleteById(primaryId: Pick<UserInterface, 'id'>): Promise<void> {
+  async deleteById(primaryId: Pick<UserModel, 'id'>): Promise<void> {
     const user = await this.findById(primaryId);
     if (!user) throw new NotFoundException('User not found'); // The HTTP exception only work on REST API
 
@@ -44,8 +44,8 @@ export class UserRepository {
   }
 
   async updateById(
-    primaryId: Pick<UserInterface, 'id'>,
-    data: Omit<UserInterface, 'id'>,
+    primaryId: Pick<UserModel, 'id'>,
+    data: Omit<UserModel, 'id'>,
   ): Promise<void> {
     const user = await this.findById(primaryId);
     if (!user) throw new NotFoundException('User not found');

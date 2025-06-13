@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 
-import type { ResponseWithError } from '../interface/response.interface';
+import type { ResponseWithError } from '../interface/api-response.interface';
 import { MESSAGE_RESPONSE } from '../constants/message-response.constant';
 
 @Catch()
