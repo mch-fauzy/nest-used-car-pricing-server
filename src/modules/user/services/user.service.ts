@@ -8,22 +8,26 @@ import {
 import { UserCreateDto } from '../dto/user-create.dto';
 import { UserRepository } from '../repositories/user.repository';
 import { DB_FIELD } from 'src/common/constants/db-field.constant';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { UserByIdDto } from '../dto/user-by-id.dto';
 import { hashPassword } from 'src/common/utils/password.util';
+import { User } from '../entities/user.entity';
+import { UserQueryDto } from '../dto/user-query.dto';
+import { UserResponseDto } from '../dto/user.dto';
+import { PaginationResponse } from 'src/common/interface/response.interface';
+import { PaginationUtil } from 'src/common/utils/pagination.util';
 
 /*
  * use decorators `@Injectable()` to mark this class as injectable so NestJS can manage and inject it as a provider
  * Enables Dependency Injection (DI).
  * Required for classes that receive constructor-injected dependencies (e.g., AuthService, UserRepository).
  */
-// TODO: add return data to every method except removing or deleting method
+// TODO: ADD RETURN TYPE (IF NOT NATIVE TYPE) IN CONTROLLER, SERVICE, REPO AND ADD MIDDLEWARE OR UTILS TO response with data (message, data) or response with error (message, errors)
 @Injectable()
 export class UserService {
   /* Constructor injected dependencies */
   constructor(private userRepo: UserRepository) {}
 
-  async create(req: UserCreateDto) {
+  async create(req: UserCreateDto): Promise<User> {
     const { totalUsers } = await this.userRepo.findManyAndCountByFilter({
       selectFields: [DB_FIELD.EMAIL],
       filterFields: [
@@ -46,19 +50,28 @@ export class UserService {
     });
   }
 
-  async getList(req: PaginationDto) {
-    const { users } = await this.userRepo.findManyAndCountByFilter({
+  async getList(
+    req: UserQueryDto,
+  ): Promise<PaginationResponse<UserResponseDto>> {
+    const { users, totalUsers } = await this.userRepo.findManyAndCountByFilter({
       pagination: {
         page: req.page,
         limit: req.limit,
       },
     });
 
-    return users;
+    return {
+      metadata: PaginationUtil.mapMetadata({
+        count: totalUsers,
+        page: req.page,
+        perPage: req.limit,
+      }),
+      items: UserResponseDto.fromEntities(users),
+    };
   }
 
   async getById(req: UserByIdDto) {
-    const user = await this.userRepo.findById(req);
+    const user = await this.userRepo.findById({ id: req.id });
     if (!user) throw new NotFoundException('User not found');
 
     return user;

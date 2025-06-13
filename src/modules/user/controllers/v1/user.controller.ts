@@ -10,33 +10,46 @@ import {
 import { Request } from 'express';
 
 import { UserService } from '../../services/user.service';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { UserByIdDto } from '../../dto/user-by-id.dto';
-import { UserDto } from '../../dto/user.dto';
+import { UserDto, UserResponseDto } from '../../dto/user.dto';
 import { SerializeIntercept } from 'src/common/interceptors/serialize.interceptor';
-import { responseWithData } from 'src/common/utils/response.util';
-import { MESSAGE_RESPONSE } from 'src/common/constants/message-response.constant';
 import { JwtAuthGuard } from 'src/common/guards/auth-jwt.guard';
+import { CurrentUser } from '../../../../common/decorators/current-user.decorator';
 import { LoggedInUserDto } from 'src/common/dto/logged-in-user.dto';
+import { UserQueryDto } from '../../dto/user-query.dto';
+import {
+  ApiResponse,
+  PaginationResponse,
+} from 'src/common/interface/response.interface';
+import { API_RESPONSE_MESSAGE } from 'src/common/constants/api-response-message.constant';
 
+// TODO: ADD RETURN TYPE (IF NOT NATIVE TYPE) IN CONTROLLER, SERVICE, REPO AND ADD MIDDLEWARE OR UTILS TO response with data (message, data) or response with error (message, errors)
+@UseGuards(JwtAuthGuard)
 @Controller('v1/users')
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @SerializeIntercept(UserDto) // Intercept response and map the response based on expose decorator on dto (i.e, dto/user.dto.ts), you can put the intercept in each specific route
   @Get()
-  async getList(@Query() query: PaginationDto) {
+  async getList(
+    @Query() query: UserQueryDto,
+  ): Promise<ApiResponse<PaginationResponse<UserResponseDto>>> {
     const response = await this.userService.getList(query);
-    return response;
+    return {
+      message: API_RESPONSE_MESSAGE.SUCCESS_GET_DATA('users'),
+      data: response,
+    };
   }
 
+  // NOTE: user return type same as decorators
   @UseGuards(JwtAuthGuard)
   @SerializeIntercept(UserDto)
   @Get('me')
-  async getCurrentUser(@Req() req: Request) {
-    const currentUser = LoggedInUserDto.fromRequest(req);
+  async getCurrentUser(@CurrentUser() user: LoggedInUserDto) {
+    // const currentUser = LoggedInUserDto.fromRequest(req);
+    console.log(user);
+    console.log(user.id);
     const response = await this.userService.getById({
-      id: currentUser.sub,
+      id: user.id,
     });
     return response;
   }
@@ -45,19 +58,20 @@ export class UserController {
   @SerializeIntercept(UserDto)
   @Get(':id')
   async getById(@Param() params: UserByIdDto) {
-    const response = await this.userService.getById(params);
+    const response = await this.userService.getById({
+      id: params.id,
+    });
     return response;
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async removeById(@Param() params: UserByIdDto, @Req() req: Request) {
-    const currentUser = LoggedInUserDto.fromRequest(req);
-    await this.userService.removeById({
-      ...params,
-      currentUserId: currentUser.sub,
-    });
-
-    return responseWithData({ message: MESSAGE_RESPONSE.SUCCESS, data: null });
+    // const currentUser = LoggedInUserDto.fromRequest(req);
+    // await this.userService.removeById({
+    //   id: params.id,
+    //   currentUserId: currentUser.sub,
+    // });
+    // return responseWithData({ message: MESSAGE_RESPONSE.SUCCESS, data: null });
   }
 }
