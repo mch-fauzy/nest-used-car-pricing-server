@@ -11,8 +11,7 @@ import { Request } from 'express';
 
 import { UserService } from '../../services/user.service';
 import { UserByIdDto } from '../../dto/user-by-id.dto';
-import { UserDto, UserResponse } from '../../dto/user.dto';
-import { SerializeIntercept } from 'src/common/interceptors/serialize.interceptor';
+import { UserResponse } from '../../dto/user.dto';
 import { JwtAuthGuard } from 'src/common/guards/auth-jwt.guard';
 import { CurrentUser } from '../../../../common/decorators/current-user.decorator';
 import { LoggedInUserDto } from 'src/common/dto/logged-in-user.dto';
@@ -23,7 +22,6 @@ import {
 } from 'src/common/interface/api-response.interface';
 import { API_RESPONSE_MESSAGE } from 'src/common/constants/api-response-message.constant';
 
-// TODO: ADD RETURN TYPE (IF NOT NATIVE TYPE) IN CONTROLLER, SERVICE, REPO AND ADD MIDDLEWARE OR UTILS TO response with data (message, data) or response with error (message, errors)
 @UseGuards(JwtAuthGuard)
 @Controller('v1/users')
 export class UserController {
@@ -40,30 +38,37 @@ export class UserController {
     };
   }
 
-  // NOTE: user return type same as decorators
+  // NOTE: loggedInUser return type same as decorators
   @UseGuards(JwtAuthGuard)
-  @SerializeIntercept(UserDto)
   @Get('me')
-  async getCurrentUser(@CurrentUser() user: LoggedInUserDto) {
-    // const currentUser = LoggedInUserDto.fromRequest(req);
-    console.log(user);
-    console.log(user.id);
+  async getCurrentUser(
+    @CurrentUser() loggedInUser: LoggedInUserDto,
+  ): Promise<ApiResult<UserResponse>> {
     const response = await this.userService.getById({
-      id: user.id,
+      id: loggedInUser.id,
     });
-    return response;
+    return {
+      message: API_RESPONSE_MESSAGE.SUCCESS_GET_DATA('own user'),
+      data: response,
+    };
   }
 
   @UseGuards(JwtAuthGuard)
-  @SerializeIntercept(UserDto)
   @Get(':id')
-  async getById(@Param() params: UserByIdDto) {
+  async getById(
+    @Param() params: UserByIdDto,
+  ): Promise<ApiResult<UserResponse>> {
     const response = await this.userService.getById({
       id: params.id,
     });
-    return response;
+
+    return {
+      message: API_RESPONSE_MESSAGE.SUCCESS_GET_DATA('user'),
+      data: response,
+    };
   }
 
+  // TODO: ADD RETURN TYPE (IF NOT NATIVE TYPE) IN CONTROLLER, SERVICE, REPO AND ADD MIDDLEWARE OR UTILS TO response with data (message, data) or response with error (message, errors)
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async removeById(@Param() params: UserByIdDto, @Req() req: Request) {

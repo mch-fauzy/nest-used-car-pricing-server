@@ -1,15 +1,9 @@
-import { PaginationMetadata } from "./metadata.interface";
+import { PaginationMetadata } from './metadata.interface';
 
 // TODO: Delete when unused
 export interface ResponseWithError {
   message: string;
   errors: unknown;
-}
-
-// TODO: Delete when unused
-export interface ResponseWithData {
-  message: string;
-  data: unknown;
 }
 
 /* Generic interface that represents a response with pagination metadata and a list of items */

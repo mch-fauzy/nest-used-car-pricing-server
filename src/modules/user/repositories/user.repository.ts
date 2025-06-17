@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
 import type { Filter } from 'src/common/interface/filter.interface';
 import { UserModel } from '../interfaces/user.interface';
+import { ERROR_MESSAGE } from 'src/common/constants/error-message.constant';
 
 /*
  * use decorators `@Injectable()` to mark this class as injectable so NestJS can manage and inject it as a provider
@@ -36,9 +37,15 @@ export class UserRepository {
     return user;
   }
 
+  async findOrFailById(primaryId: Pick<UserModel, 'id'>): Promise<User> {
+    const user = await this.userRepo.findOneBy({ id: primaryId.id });
+    if (!user) throw new NotFoundException(ERROR_MESSAGE.USER_NOT_FOUND); // The HTTP exception only work on REST API
+
+    return user;
+  }
+
   async deleteById(primaryId: Pick<UserModel, 'id'>): Promise<void> {
-    const user = await this.findById(primaryId);
-    if (!user) throw new NotFoundException('User not found'); // The HTTP exception only work on REST API
+    const user = await this.findOrFailById(primaryId);
 
     await this.userRepo.remove(user);
   }
@@ -47,8 +54,7 @@ export class UserRepository {
     primaryId: Pick<UserModel, 'id'>,
     data: Omit<UserModel, 'id'>,
   ): Promise<void> {
-    const user = await this.findById(primaryId);
-    if (!user) throw new NotFoundException('User not found');
+    const user = await this.findOrFailById(primaryId);
 
     await this.userRepo.save(Object.assign(user, data));
   }

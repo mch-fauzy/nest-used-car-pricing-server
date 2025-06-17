@@ -3,16 +3,13 @@ import {
   type ExecutionContext,
   type CallHandler,
   type Type,
-  UseInterceptors,
 } from '@nestjs/common';
 import { map, Observable } from 'rxjs';
 import { plainToInstance } from 'class-transformer';
-import { responseWithData } from '../utils/response.util';
 import { MESSAGE_RESPONSE } from '../constants/message-response.constant';
-import { ResponseWithData } from '../interface/api-response.interface';
 
 /* Note/To Do:
- * Will not used, use return type directly and using fromEntity or fromEntities method in service instead. e.g: UserResponse.fromEntity(userData)
+ * Will not used, use return type directly and using fromEntity or fromEntities method in service instead. e.g: UserResponse.from(userData)
  */
 
 /*
@@ -21,7 +18,12 @@ import { ResponseWithData } from '../interface/api-response.interface';
  * TLDR: Mapping response into specific DTO response
  */
 
-class SerializeInterceptor<T> implements NestInterceptor {
+interface ResponseWithData {
+  message: string;
+  data: unknown;
+}
+
+export class SerializeInterceptor<T> implements NestInterceptor {
   constructor(private dto: Type<T>) {}
 
   intercept(
@@ -40,16 +42,11 @@ class SerializeInterceptor<T> implements NestInterceptor {
           excludeExtraneousValues: true, // Only expose specific field based on decorators @Expose or @Exclude
         });
 
-        return responseWithData({
+        return {
           message: MESSAGE_RESPONSE.SUCCESS,
           data: dataInClassObject,
-        });
+        };
       }),
     );
   }
-}
-
-// TODO move this into decorators
-export function SerializeIntercept<T>(dto: Type<T>) {
-  return UseInterceptors(new SerializeInterceptor(dto));
 }

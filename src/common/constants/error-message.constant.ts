@@ -5,6 +5,8 @@ export const ERROR_MESSAGE = {
   AUTHENTICATED_USER_NOT_FOUND: 'Authenticated user not found',
   AUTHENTICATED_USER_NOT_FOUND_IN_REQUEST:
     'Authenticated user not found in the request',
+  USER_NOT_FOUND: 'User not found',
+  EMAIL_ALREADY_EXISTS: (email: string) => `Email ${email} is already exists`,
   ForbiddenAccess: 'Forbidden Access',
   NotFound: 'Not Found',
   InternalServerError: 'Internal Server Error',
@@ -26,7 +28,6 @@ export const ERROR_MESSAGE = {
   QueryError: 'Query Error',
   DataNotFound: 'Data Not Found',
   LengthCharacter: (length: number) => `Field harus ${length} karakter`,
-  EmailAlreadyExists: (email: string) => `Email ${email} sudah terdaftar`,
   EmailsAlreadyExists: (emails: string[]) =>
     `Email(s) ${emails.join(', ')} sudah terdaftar`,
   PhoneNumberAlreadyExists: (phoneNumber: string) =>

@@ -15,9 +15,7 @@ export class PaginationUtil {
    * @returns An object containing pagination metadata, including the current page,
    * number of items per page, total number of items, and total number of pages.
    */
-  static mapMetadata(
-    params: PaginationInput,
-  ): PaginationMetadata {
+  static mapMetadata(params: PaginationInput): PaginationMetadata {
     const page = params.page;
     const perPage = params.perPage;
 
