@@ -14,6 +14,7 @@ import { UserResponse } from '../dto/user.dto';
 import { Paginated } from 'src/common/interface/api-response.interface';
 import { PaginationUtil } from 'src/common/utils/pagination.util';
 import { ERROR_MESSAGE } from 'src/common/constants/error-message.constant';
+import { LoggedInUserDto } from 'src/common/dto/logged-in-user.dto';
 
 /*
  * use decorators `@Injectable()` to mark this class as injectable so NestJS can manage and inject it as a provider
@@ -50,8 +51,19 @@ export class UserService {
     });
   }
 
-  async getList(req: UserQueryDto): Promise<Paginated<UserResponse>> {
+  async getList(
+    req: UserQueryDto,
+    loggedInUser: LoggedInUserDto,
+  ): Promise<Paginated<UserResponse>> {
     const { users, totalUsers } = await this.userRepo.findManyAndCountByFilter({
+      filterFields: [
+        // Exclude logged user in list
+        {
+          field: DB_FIELD.ID,
+          operator: '!=',
+          value: loggedInUser.id,
+        },
+      ],
       pagination: {
         page: req.page,
         limit: req.limit,
@@ -81,10 +93,12 @@ export class UserService {
   }
 
   async removeById(
-    req: UserByIdDto & { currentUserId: string },
+    req: UserByIdDto,
+    loggedInUser: LoggedInUserDto,
   ): Promise<void> {
-    if (req.id === req.currentUserId)
-      throw new ForbiddenException('You cannot delete your own account');
+    if (req.id === loggedInUser.id)
+      throw new ForbiddenException(ERROR_MESSAGE.CANNOT_DELETE_OWN_ACCOUNT);
+
     await this.userRepo.deleteById({
       id: req.id,
     });

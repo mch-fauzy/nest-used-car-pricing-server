@@ -7,6 +7,7 @@ export const ERROR_MESSAGE = {
     'Authenticated user not found in the request',
   USER_NOT_FOUND: 'User not found',
   EMAIL_ALREADY_EXISTS: (email: string) => `Email ${email} is already exists`,
+  CANNOT_DELETE_OWN_ACCOUNT: 'You cannot delete your own account',
   ForbiddenAccess: 'Forbidden Access',
   NotFound: 'Not Found',
   InternalServerError: 'Internal Server Error',

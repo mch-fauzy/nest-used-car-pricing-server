@@ -6,6 +6,7 @@ import { User } from '../entities/user.entity';
 import type { Filter } from 'src/common/interface/filter.interface';
 import { UserModel } from '../interfaces/user.interface';
 import { ERROR_MESSAGE } from 'src/common/constants/error-message.constant';
+import { LoggedInUserDto } from 'src/common/dto/logged-in-user.dto';
 
 /*
  * use decorators `@Injectable()` to mark this class as injectable so NestJS can manage and inject it as a provider
@@ -46,7 +47,9 @@ export class UserRepository {
 
   async deleteById(primaryId: Pick<UserModel, 'id'>): Promise<void> {
     const user = await this.findOrFailById(primaryId);
-
+    // TODO: use soft delete
+    // Soft delete need deletedAt column in table
+    // await this.userRepo.softDelete({id: primaryId.id});
     await this.userRepo.remove(user);
   }
 
