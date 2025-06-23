@@ -8,6 +8,7 @@ export const ERROR_MESSAGE = {
   USER_NOT_FOUND: 'User not found',
   EMAIL_ALREADY_EXISTS: (email: string) => `Email ${email} is already exists`,
   CANNOT_DELETE_OWN_ACCOUNT: 'You cannot delete your own account',
+  ADMIN_ROLE_REQUIRED: 'Admin role required to access this resource',
   ForbiddenAccess: 'Forbidden Access',
   NotFound: 'Not Found',
   InternalServerError: 'Internal Server Error',
