@@ -8,7 +8,7 @@ import {
   AuthSignInResponseDto,
 } from '../../dto/auth-sign-in.dto';
 import { AuthService } from '../../services/auth.service';
-import { ApiResult } from 'src/common/interface/api-response.interface';
+import { ApiResult } from 'src/common/interfaces/api-response.interface';
 import { API_RESPONSE_MESSAGE } from 'src/common/constants/api-response-message.constant';
 
 // TODO: implement jwt refresh token https://chatgpt.com/share/6807c8ed-f68c-800c-870a-1a07e7bcf28c

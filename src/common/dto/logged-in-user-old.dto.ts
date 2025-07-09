@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { JwtTokenPayload } from '../interface/jwt-payload.interface';
+import { JwtTokenPayload } from '../interfaces/jwt-payload.interface';
 
 // NOTE: you can use this or custom decorator in src/modules/user/decorators/current-user.decorator.ts and dto in src/common/dto/logged-in-user.dto.ts
 export class LoggedInUserOldDto {

@@ -1,4 +1,4 @@
-import { PaginationMetadata } from '../interface/metadata.interface';
+import { PaginationMetadata } from '../interfaces/metadata.interface';
 
 /* This interface defines a contract for objects that will be used for pagination calculations */
 interface PaginationInput {

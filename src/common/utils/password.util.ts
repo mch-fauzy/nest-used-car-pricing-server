@@ -1,7 +1,10 @@
 import { hash, compare, genSalt } from 'bcryptjs';
 
 import { AUTH } from 'src/infrastructure/configs/auth.config';
-import { PasswordCompare, PasswordHash } from '../interface/password.interface';
+import {
+  PasswordCompare,
+  PasswordHash,
+} from '../interfaces/password.interface';
 
 export const hashPassword = async ({
   password,

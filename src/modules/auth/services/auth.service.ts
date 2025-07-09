@@ -9,7 +9,7 @@ import {
   AuthSignInRequestDto,
   AuthSignInResponseDto,
 } from '../dto/auth-sign-in.dto';
-import type { JwtTokenPayload } from 'src/common/interface/jwt-payload.interface';
+import type { JwtTokenPayload } from 'src/common/interfaces/jwt-payload.interface';
 import { DB_FIELD } from 'src/common/constants/db-field.constant';
 import { comparePassword } from 'src/common/utils/password.util';
 import { User } from 'src/modules/user/entities/user.entity';

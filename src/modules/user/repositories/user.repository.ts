@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { User } from '../entities/user.entity';
-import type { Filter } from 'src/common/interface/filter.interface';
+import type { Filter } from 'src/common/interfaces/filter.interface';
 import { UserModel } from '../interfaces/user.interface';
 import { ERROR_MESSAGE } from 'src/common/constants/error-message.constant';
 import { LoggedInUserDto } from 'src/common/dto/logged-in-user.dto';
@@ -55,7 +55,7 @@ export class UserRepository {
 
   async updateById(
     primaryId: Pick<UserModel, 'id'>,
-    data: Omit<UserModel, 'id'>,
+    data: Omit<Partial<UserModel>, 'id'>,
   ): Promise<void> {
     const user = await this.findOrFailById(primaryId);
 

@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from '../../modules/user/services/user.service';
 import { Observable } from 'rxjs';
-import { JwtTokenPayload } from 'src/common/interface/jwt-payload.interface';
+import { JwtTokenPayload } from 'src/common/interfaces/jwt-payload.interface';
 
 // NOTE: Currently unused, because using passport in src/modules/auth/strategies/auth-jwt.strategy.ts
 @Injectable()

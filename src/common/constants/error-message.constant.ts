@@ -9,6 +9,8 @@ export const ERROR_MESSAGE = {
   EMAIL_ALREADY_EXISTS: (email: string) => `Email ${email} is already exists`,
   CANNOT_DELETE_OWN_ACCOUNT: 'You cannot delete your own account',
   ADMIN_ROLE_REQUIRED: 'Admin role required to access this resource',
+  INVALID_ENUM: (allowed: readonly string[]) =>
+    `Value is invalid. Must be one of: ${allowed.join(', ')}`,
   ForbiddenAccess: 'Forbidden Access',
   NotFound: 'Not Found',
   InternalServerError: 'Internal Server Error',

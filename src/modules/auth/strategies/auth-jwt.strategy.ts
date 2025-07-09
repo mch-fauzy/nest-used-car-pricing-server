@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 import { AUTH } from 'src/infrastructure/configs/auth.config';
-import type { JwtTokenPayload } from 'src/common/interface/jwt-payload.interface';
+import type { JwtTokenPayload } from 'src/common/interfaces/jwt-payload.interface';
 import { AuthService } from '../services/auth.service';
 import { LoggedInUserDto } from '../../../common/dto/logged-in-user.dto';
 
