@@ -1,10 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Base } from 'src/common/entities/base.entity';
+import { Entity, Column } from 'typeorm';
 
 @Entity()
-export class Report {
-  @PrimaryGeneratedColumn()
-  id!: number;
-
+export class Report extends Base {
   @Column()
   price!: number;
 }
